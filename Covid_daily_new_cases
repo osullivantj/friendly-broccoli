@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 17 11:51:25 2020
+
+@author: tjosullivan
+"""
+
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+JHU_confirmed_global_url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+
+
+df = pd.read_csv(JHU_confirmed_global_url) #if you want the first column to be an index, index_col=0
+print(df.head(5))
+
+df = df.drop(columns=['Province/State','Lat','Long'])
+df.columns
+df['Country/Region']
+
+df = df.groupby('Country/Region').sum()  #use group by to sum accross regions
+countries = df.index
+
+UK = df.loc['United Kingdom',:]
+UK_new_cases = UK.diff(periods=1)
+print(UK)
+
+plt.plot(UK_new_cases)
+plt.show()
